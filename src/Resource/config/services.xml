@@ -13,7 +13,10 @@
         </service>
         <service id="laulamanapps_apple_passbook.build.manifestgenerator" class="LauLamanApps\ApplePassbook\Build\ManifestGenerator" public="false" />
         <service id="laulamanapps_apple_passbook.build.signer" class="LauLamanApps\ApplePassbook\Build\Signer" public="false" />
-        <service id="laulamanapps_apple_passbook.build.compressor" class="LauLamanApps\ApplePassbook\Build\Compressor" public="false" />
+        <service id="laulamanapps_apple_passbook.php.zip_archive" class="ZipArchive" public="false" />
+        <service id="laulamanapps_apple_passbook.build.compressor" class="LauLamanApps\ApplePassbook\Build\Compressor" public="false">
+            <argument type="service" id="laulamanapps_apple_passbook.php.zip_archive" />
+        </service>
 
         <service id="laulamanapps_apple_passbook.push_notification.update_notifier" class="LauLamanApps\ApplePassbookBundle\PushNotification\PassbookUpdateNotifier" public="false">
             <argument type="service" id="laulamanapps_apple_passbook.build.signer" />
