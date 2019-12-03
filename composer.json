@@ -33,9 +33,21 @@
         }
     },
     "require": {
-        "php": ">=7.1",
+        "php": ">=7.2",
         "laulamanapps/apple-passbook": "^1.0",
         "ext-openssl": "*"
+    },
+    "require-dev": {
+        "symfony/http-foundation": "^4.3|^5.0",
+        "symfony/routing": "^4.3|^5.0",
+        "symfony/event-dispatcher": "^4.3|^5.0",
+        "symfony/framework-bundle": "^4.3|^5.0"
+    },
+    "suggest": {
+        "symfony/http-foundation": "^4.3|^5.0",
+        "symfony/routing": "^4.3|^5.0",
+        "symfony/event-dispatcher": "^4.3|^5.0",
+        "symfony/framework-bundle": "^4.3|^5.0"
     },
     "config": {
         "bin-dir": "bin"
