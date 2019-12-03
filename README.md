@@ -60,11 +60,8 @@ APPLE_PASSBOOK_WEB_SERVICE_URL='http://example.com/'
 Create & Compile Passbook
 ---
 ```php
-<?php
+namespace App\Controller;
 
-declare(strict_types=1);
-
-namespace SoulSurvivor\UserInterface\Ticket\Download;
 use LauLamanApps\ApplePassbook\Build\Compiler;
 use LauLamanApps\ApplePassbook\GenericPassbook;
 use LauLamanApps\ApplePassbook\MetaData\Barcode;
@@ -113,7 +110,7 @@ final class PassbookController extends AbstractController
 }
 ```
 
-Configure Buildin Webservices
+Configure Build in Webservices
 ---
 This package comes with build in controllers for all Apple passbooks webservice URLs.
 It is using Symfonys build in `EventDispatcher`. 
@@ -124,13 +121,40 @@ passbook_routes:
     resource: '@ApplePassbookBundle/Controller/'
     type:     annotation
 ```
+The controllers will dispatch the following events, the following information is available:
+```php
+/* Available on All events */
+$event->getPassTypeIdentifier();
+$event->getStatus();
+
+/* Available on DeviceRegisteredEvent */
+$event->getAuthenticationToken();
+$event->getDeviceLibraryIdentifier();
+$event->getSerialNumber();
+
+/* Available on DeviceRequestUpdatedPassesEvent */
+$event->getAuthenticationToken();
+$event->getDeviceLibraryIdentifier();
+$event->getPassesUpdatedSince();
+
+/* Available on DeviceUnregisteredEvent */
+$event->getAuthenticationToken();
+$event->getDeviceLibraryIdentifier();
+$event->getSerialNumber();
+
+/* Available on RetrieveUpdatedPassbookEvent */
+$event->getAuthenticationToken();
+$event->getSerialNumber();
+$event->getPassTypeIdentifier();
+$event->getUpdatedSince();
+```
 
 Now Subscribe to the events:
+
+The idea here is that you handle the event and mark the events as handled by calling setters on the event itself.
+The event by default has the status `Status::unhandled()`
+
 ```php
-<?php
-
-declare(strict_types=1);
-
 namespace App\Integration\Symfony\EventSubscriber;
 
 use DateTimeImmutable;
