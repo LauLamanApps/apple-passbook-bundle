@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 class ApplePassbookBundleTest extends TestCase
 {
     /**
-     * @covers \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle::testGetContainerExtension
+     * @covers \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle::getContainerExtension
      */
     public function testGetContainerExtension(): void
     {
@@ -26,7 +26,7 @@ class ApplePassbookBundleTest extends TestCase
     }
 
     /**
-     * @covers \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle::testGetContainerExtension
+     * @covers \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle::getContainerExtension
      */
     public function testGetContainerExtensionTwiceReturnsSameExtension(): void
     {
