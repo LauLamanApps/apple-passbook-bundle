@@ -48,7 +48,7 @@ class PassbookController extends AbstractController
             $serialNumber,
             $this->getAuthenticationToken($request)
         );
-        $this->eventDispatcher->dispatch($event)->getStatus();
+        $this->eventDispatcher->dispatch($event);
 
         if ($event->getStatus()->isUnhandled()) {
             throw new LogicException('RetrieveUpdatedPassbookEvent was not handled. Please implement a listener for this event.');
@@ -64,17 +64,19 @@ class PassbookController extends AbstractController
 
         if ($event->getStatus()->isSuccessful()) {
             $data = $this->compiler->compile($event->getPassbook());
+            $lastModified = $event->getLastModified();
+            $lastModified = $lastModified->setTimezone(new \DateTimeZone('GMT'));
 
             $response = new Response($data);
             $response->headers->set('Content-Description', 'File Transfer');
             $response->headers->set('Content-Type', 'application/vnd.apple.pkpass');
             $response->headers->set('Content-Disposition', 'filename="pass.pkpass"');
-            $response->headers->set('Last-Modified', (new DateTimeImmutable())->format('D, d M Y H:i:s \G\M\T'));
+            $response->headers->set('Last-Modified', $lastModified->format('D, d M Y H:i:s \G\M\T'));
 
             return $response;
         }
 
-        return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        throw new LogicException('RetrieveUpdatedPassbookEvent was not handled correctly. Unexpected status was set.');
     }
 }
 

@@ -30,9 +30,14 @@ final class RetrieveUpdatedPassbookEvent extends AbstractEvent
     private $updatedSince;
 
     /**
-     * @var Passbook
+     * @var Passbook|null
      */
     private $passbook;
+
+    /**
+     * @var DateTimeImmutable|null
+     */
+    private $lastModified;
 
     public function __construct(string $passTypeIdentifier, string $serialNumber, string $authenticationToken, ?DateTimeImmutable $updatedSince = null)
     {
@@ -43,9 +48,11 @@ final class RetrieveUpdatedPassbookEvent extends AbstractEvent
         $this->updatedSince = $updatedSince;
     }
 
-    public function setPassbook(Passbook $passbook): void
+    public function setPassbook(Passbook $passbook, DateTimeImmutable $lastModified): void
     {
+
         $this->successful();
+        $this->lastModified = $lastModified;
         $this->passbook = $passbook;
     }
 
@@ -69,8 +76,13 @@ final class RetrieveUpdatedPassbookEvent extends AbstractEvent
         return $this->updatedSince;
     }
 
-    public function getPassbook(): Passbook
+    public function getPassbook(): ?Passbook
     {
         return $this->passbook;
+    }
+
+    public function getLastModified(): ?DateTimeImmutable
+    {
+        return $this->lastModified;
     }
 }

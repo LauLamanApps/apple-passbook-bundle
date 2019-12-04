@@ -37,7 +37,7 @@ class DeviceController extends AbstractController
     /**
      * @Route("/{serialNumber}", methods={"POST"})
      */
-    public function registerDevice(
+    public function register(
         Request $request,
         string $deviceLibraryIdentifier,
         string $passTypeIdentifier,
@@ -70,7 +70,7 @@ class DeviceController extends AbstractController
             return new JsonResponse([], Response::HTTP_CREATED);
         }
 
-        return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        throw new LogicException('DeviceRegisteredEvent was not handled correctly. Unexpected status was set.');
     }
 
     /**
@@ -104,7 +104,7 @@ class DeviceController extends AbstractController
             return new JsonResponse([], Response::HTTP_OK);
         }
 
-        return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        throw new LogicException('DeviceUnregisteredEvent was not handled correctly. Unexpected status was set.');
     }
 
     /**
@@ -136,6 +136,6 @@ class DeviceController extends AbstractController
             ]);
         }
 
-        return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        throw new LogicException('DeviceRequestUpdatedPassesEvent was not handled correctly. Unexpected status was set.');
     }
 }

@@ -4,4 +4,6 @@ composer.lock
 .idea/
 .php_cs.cache
 vendor/
-bin/
+bin/*
+!bin/infection.phar
+!bin/phpunit-8.4.3.phar

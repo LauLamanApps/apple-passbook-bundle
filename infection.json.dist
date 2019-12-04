@@ -1,0 +1,23 @@
+{
+    "timeout": 10,
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "bin",
+            "certificates",
+            "tests",
+            "vendor"
+        ]
+    },
+    "phpUnit": {
+        "customPath": "bin\/phpunit-8.4.3.phar"
+    },
+    "logs": {
+        "text": "infection.log"
+    },
+    "mutators": {
+        "@default": true
+    }
+}

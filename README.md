@@ -6,8 +6,8 @@ This package provides Symfony configuration for [LauLamanApps Apple Passbook Pac
 [![Build Status](https://scrutinizer-ci.com/g/LauLamanApps/apple-passbook-bundle/badges/build.png?b=master)](https://scrutinizer-ci.com/g/LauLamanApps/apple-passbook-bundle/build-status/master)
 [![Code Coverage](https://scrutinizer-ci.com/g/LauLamanApps/apple-passbook-bundle/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/LauLamanApps/apple-passbook-bundle/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/LauLamanApps/apple-passbook-bundle/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/LauLamanApps/apple-passbook-bundle/?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/laulamanapps/apple-passbook-bundle/v/stable)](https://packagist.org/packages/laulamanapps/apple-passbook)
-[![License](https://poser.pugx.org/laulamanapps/apple-passbook-bundle/license)](https://packagist.org/packages/laulamanapps/apple-passbook)
+[![Latest Stable Version](https://poser.pugx.org/laulamanapps/apple-passbook-bundle/v/stable)](https://packagist.org/packages/laulamanapps/apple-passbook-bundle)
+[![License](https://poser.pugx.org/laulamanapps/apple-passbook-bundle/license)](https://packagist.org/packages/laulamanapps/apple-passbook-bundle)
 
 Installation
 ---
