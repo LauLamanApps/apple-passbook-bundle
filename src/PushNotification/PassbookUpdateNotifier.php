@@ -6,6 +6,9 @@ namespace LauLamanApps\ApplePassbookBundle\PushNotification;
 
 use LauLamanApps\ApplePassbook\Build\Signer;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class PassbookUpdateNotifier
 {
     /**

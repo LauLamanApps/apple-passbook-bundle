@@ -15,6 +15,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController
+ */
 class PassbookControllerTest extends TestCase
 {
     use RequestHelper;

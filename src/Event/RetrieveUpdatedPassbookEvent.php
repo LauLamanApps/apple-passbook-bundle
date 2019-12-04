@@ -50,7 +50,6 @@ final class RetrieveUpdatedPassbookEvent extends AbstractEvent
 
     public function setPassbook(Passbook $passbook, DateTimeImmutable $lastModified): void
     {
-
         $this->successful();
         $this->lastModified = $lastModified;
         $this->passbook = $passbook;

@@ -21,6 +21,7 @@ final class DeviceUnregisteredEvent extends AbstractEvent
      * @var string
      */
     private $serialNumber;
+
     /**
      * @var string
      */

@@ -25,6 +25,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testRegisterDispatchesEventAndThrowsWhenEventIsNotHandled(): void
     {
@@ -53,6 +54,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testRegisterReturnsHttpUnauthorized(): void
     {
@@ -85,6 +87,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testRegisterReturnsHttpOk(): void
     {
@@ -117,6 +120,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testRegisterReturnsHttpCreated(): void
     {
@@ -149,6 +153,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testRegisterThrowsWhenEventWasNotHandledCorrectly(): void
     {
@@ -181,6 +186,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testUnregisterDispatchesEventAndThrowsWhenEventIsNotHandled(): void
     {
@@ -209,6 +215,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testUnregisterReturnsHttpUnauthorized(): void
     {
@@ -240,6 +247,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testUnregisterReturnsHttpOk(): void
     {
@@ -271,6 +279,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testUnregisterThrowsWhenEventWasNotHandledCorrectly(): void
     {
@@ -302,6 +311,7 @@ class DeviceControllerTest extends TestCase
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::getSerialNumbers
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::__construct
+     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\AuthenticationToken::getAuthenticationToken
      */
     public function testGetSerialNumbersDispatchesEventAndThrowsWhenEventIsNotHandled(): void
     {

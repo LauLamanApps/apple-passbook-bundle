@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/v1/log")
  */
-final class LogController extends AbstractController
+class LogController extends AbstractController
 {
     /**
      * @var LoggerInterface

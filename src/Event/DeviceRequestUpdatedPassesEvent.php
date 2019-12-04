@@ -33,10 +33,14 @@ final class DeviceRequestUpdatedPassesEvent extends AbstractEvent
      */
     private $serialNumbers;
 
-    public function __construct(string $deviceLibraryIdentifier, string $passTypeIdentifier)
-    {
+    public function __construct(
+        string $deviceLibraryIdentifier,
+        string $passTypeIdentifier,
+        DateTimeImmutable $passesUpdatedSince = null
+    ) {
         $this->deviceLibraryIdentifier = $deviceLibraryIdentifier;
         $this->passTypeIdentifier = $passTypeIdentifier;
+        $this->passesUpdatedSince = $passesUpdatedSince;
         parent::__construct();
     }
 

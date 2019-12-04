@@ -14,6 +14,7 @@ final class ApplePassbookBundle extends Bundle
         if (null === $this->extension) {
             $this->extension = new ApplePassbookExtension();
         }
+
         return $this->extension;
     }
 }
