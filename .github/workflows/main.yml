@@ -20,7 +20,20 @@ jobs:
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run PHPUnit unit tests
-        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=Unit
+        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=unit
+
+  build-functional:
+    name: Functional tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --ignore-platform-reqs
+
+      - name: Run PHPUnit unit tests
+        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=iunctional
 
   build-infection:
     name: Infection tests

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit;
 
-use DateTimeImmutable;
 use LauLamanApps\ApplePassbook\Build\Compiler;
 use LauLamanApps\ApplePassbookBundle\Event\RetrieveUpdatedPassbookEvent;
 use LogicException;

@@ -1,3 +1,4 @@
+cache/
 coverage/
 composer
 composer.lock
@@ -9,3 +10,4 @@ bin/*
 !bin/phpunit-8.4.3.phar
 infection.log
 .phpunit.result.cache
+var/
