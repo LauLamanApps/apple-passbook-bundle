@@ -19,7 +19,7 @@ jobs:
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
 
-      - name: Run PHPUnit unit tests
+      - name: Run PHPUnit tests
         run: php7.3 bin/phpunit-8.4.3.phar --testsuite=unit
 
   build-functional:
@@ -32,8 +32,8 @@ jobs:
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
 
-      - name: Run PHPUnit unit tests
-        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=iunctional
+      - name: Run PHPUnit tests
+        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=functional
 
   build-infection:
     name: Infection tests
