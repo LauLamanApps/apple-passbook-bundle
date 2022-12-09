@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class TestKernel  extends Kernel
@@ -29,9 +30,9 @@ class TestKernel  extends Kernel
         ];
     }
 
-    protected function configureRoutes(RouteCollectionBuilder $routes)
+    public function loadRoutes(LoaderInterface $loader): RouteCollection
     {
-        $routes->import(__DIR__.'/../../src/Resources/config/routes.xml', '/');
+        $loader->load(__DIR__.'/../../src/Resources/config/routes.xml', '/');
     }
 
     protected function configureContainer(ContainerBuilder $containerBuilder, LoaderInterface $loader)
@@ -46,7 +47,7 @@ class TestKernel  extends Kernel
         ]);
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return __DIR__.'/../../cache/'.spl_object_hash($this);
     }
