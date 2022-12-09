@@ -7,7 +7,6 @@ namespace LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit;
 use LauLamanApps\ApplePassbook\Build\Compiler;
 use LauLamanApps\ApplePassbookBundle\Event\RetrieveUpdatedPassbookEvent;
 use LogicException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 /**
  * @Route("/v1/passes/{passTypeIdentifier}/{serialNumber}")
  */
-class PassbookController extends AbstractController
+class PassbookController
 {
     use AuthenticationToken;
 

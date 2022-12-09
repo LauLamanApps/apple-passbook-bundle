@@ -14,8 +14,8 @@
     <php>
         <ini name="error_reporting" value="-1" />
         <env name="KERNEL_CLASS" value="LauLamanApps\ApplePassbookBundle\Tests\Functional\TestKernel" />
-        <env name="APP_ENV" value="test" />
-        <env name="APP_DEBUG" value="1" />
+        <env name="APP_ENV" value="test" force="true"/>
+        <env name="APP_DEBUG" value="0" />
         <env name="SHELL_VERBOSITY" value="-1" />
         <!-- define your env variables for the test env here -->
     </php>

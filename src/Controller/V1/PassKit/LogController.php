@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * @Route("/v1/log")
  */
-class LogController extends AbstractController
+class LogController
 {
     /**
      * @var LoggerInterface

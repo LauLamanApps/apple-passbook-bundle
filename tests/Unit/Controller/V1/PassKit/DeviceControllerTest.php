@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace LauLamanApps\ApplePassbookBundle\Tests\Unit\Controller\V1\PassKit;
 
 use DateTimeImmutable;
-use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController;
+use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\DeviceController;
+use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\RegisterController;
+use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\SerialNumbersController;
+use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\UnregisterController;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceRegisteredEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent;
@@ -16,7 +19,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController
+ * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\DeviceController
  */
 class DeviceControllerTest extends TestCase
 {
@@ -47,8 +50,8 @@ class DeviceControllerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectDeprecationMessage('DeviceRegisteredEvent was not handled. Please implement a listener for this event.');
 
-        $controller = new DeviceController($eventDispatcher);
-        $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new RegisterController($eventDispatcher);
+        $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
     }
 
     /**
@@ -77,8 +80,8 @@ class DeviceControllerTest extends TestCase
 
         $request = $this->createRequest($authenticationToken, ['pushToken' => $pushToken]);
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new RegisterController($eventDispatcher);
+        $response = $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
@@ -110,8 +113,8 @@ class DeviceControllerTest extends TestCase
 
         $request = $this->createRequest($authenticationToken, ['pushToken' => $pushToken]);
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new RegisterController($eventDispatcher);
+        $response = $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_OK, $response->getStatusCode());
@@ -143,8 +146,8 @@ class DeviceControllerTest extends TestCase
 
         $request = $this->createRequest($authenticationToken, ['pushToken' => $pushToken]);
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new RegisterController($eventDispatcher);
+        $response = $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_CREATED, $response->getStatusCode());
@@ -179,8 +182,8 @@ class DeviceControllerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectDeprecationMessage('DeviceRegisteredEvent was not handled correctly. Unexpected status was set.');
 
-        $controller = new DeviceController($eventDispatcher);
-        $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new RegisterController($eventDispatcher);
+        $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
     }
 
     /**
@@ -208,8 +211,8 @@ class DeviceControllerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectDeprecationMessage('DeviceUnregisteredEvent was not handled. Please implement a listener for this event.');
 
-        $controller = new DeviceController($eventDispatcher);
-        $controller->unregister($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new UnregisterController($eventDispatcher);
+        $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
     }
 
     /**
@@ -237,8 +240,8 @@ class DeviceControllerTest extends TestCase
 
         $request = $this->createRequest($authenticationToken);
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->unregister($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new UnregisterController($eventDispatcher);
+        $response = $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
@@ -269,8 +272,8 @@ class DeviceControllerTest extends TestCase
 
         $request = $this->createRequest($authenticationToken);
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->unregister($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new UnregisterController($eventDispatcher);
+        $response = $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_OK, $response->getStatusCode());
@@ -304,8 +307,8 @@ class DeviceControllerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectDeprecationMessage('DeviceUnregisteredEvent was not handled correctly. Unexpected status was set.');
 
-        $controller = new DeviceController($eventDispatcher);
-        $controller->unregister($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
+        $controller = new UnregisterController($eventDispatcher);
+        $controller($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
     }
 
     /**
@@ -328,8 +331,8 @@ class DeviceControllerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectDeprecationMessage('DeviceRequestUpdatedPassesEvent was not handled. Please implement a listener for this event.');
 
-        $controller = new DeviceController($eventDispatcher);
-        $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);
+        $controller = new SerialNumbersController($eventDispatcher);
+        $controller($deviceLibraryIdentifier, $passTypeIdentifier);
     }
 
     /**
@@ -352,8 +355,8 @@ class DeviceControllerTest extends TestCase
                 return $event;
             }));
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);
+        $controller = new SerialNumbersController($eventDispatcher);
+        $response = $controller($deviceLibraryIdentifier, $passTypeIdentifier);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_OK, $response->getStatusCode());
@@ -380,8 +383,8 @@ class DeviceControllerTest extends TestCase
                 return $event;
             }));
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);
+        $controller = new SerialNumbersController($eventDispatcher);
+        $response = $controller($deviceLibraryIdentifier, $passTypeIdentifier);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_NO_CONTENT, $response->getStatusCode());
@@ -407,8 +410,8 @@ class DeviceControllerTest extends TestCase
                 return $event;
             }));
 
-        $controller = new DeviceController($eventDispatcher);
-        $response = $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);
+        $controller = new SerialNumbersController($eventDispatcher);
+        $response = $controller($deviceLibraryIdentifier, $passTypeIdentifier);
 
         $this->assertInstanceOf(JsonResponse::class, $response);
         $this->assertSame(JsonResponse::HTTP_NOT_MODIFIED, $response->getStatusCode());
@@ -437,7 +440,7 @@ class DeviceControllerTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectDeprecationMessage('DeviceRequestUpdatedPassesEvent was not handled correctly. Unexpected status was set.');
 
-        $controller = new DeviceController($eventDispatcher);
-        $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);
+        $controller = new SerialNumbersController($eventDispatcher);
+        $controller($deviceLibraryIdentifier, $passTypeIdentifier);
     }
 }
