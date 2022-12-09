@@ -20,7 +20,7 @@ jobs:
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run PHPUnit tests
-        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=unit
+        run: php bin/phpunit-8.4.3.phar --testsuite=unit
 
   build-functional:
     name: Functional tests
@@ -33,7 +33,7 @@ jobs:
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run PHPUnit tests
-        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=functional
+        run: php bin/phpunit-8.4.3.phar --testsuite=functional
 
   build-infection:
     name: Infection tests
@@ -46,4 +46,4 @@ jobs:
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run Infection
-        run: php7.3 bin/infection.phar  --min-msi=70 --show-mutations
+        run: php bin/infection.phar  --min-msi=70 --show-mutations
