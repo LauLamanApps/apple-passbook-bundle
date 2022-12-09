@@ -19,22 +19,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
-      - name: Install composer dependencies
-        run: composer install --prefer-dist --ignore-platform-reqs
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+          extensions: openssl
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run PHPUnit tests
         run: php bin/phpunit-8.4.3.phar --testsuite=unit
-        with:
-          php-version: ${{ matrix.php-versions }}
 
   build-functional:
     name: Functional tests
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: [ '7.4', '8.0', '8.1' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: openssl
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
@@ -45,9 +56,18 @@ jobs:
   build-infection:
     name: Infection tests
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: [ '7.4', '8.0', '8.1' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: openssl
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
