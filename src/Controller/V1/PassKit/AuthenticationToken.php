@@ -10,6 +10,6 @@ trait AuthenticationToken
 {
     protected function getAuthenticationToken(Request $request): string
     {
-        return str_replace('ApplePass ', '', $request->headers->get('Authorization'));
+        return str_replace('ApplePass ', '', $request->headers->get('Authorization', ''));
     }
 }

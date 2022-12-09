@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 final class ApplePassbookExtension extends Extension
 {
-    public function getAlias()
+    public function getAlias(): string
     {
         return Configuration::ROOT;
     }

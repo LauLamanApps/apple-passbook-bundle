@@ -11,39 +11,66 @@ on:
 jobs:
   build-unit:
     name: Unit tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: [ '8.1', '8.2' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: openssl
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run PHPUnit tests
-        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=unit
+        run: php bin/phpunit-9.5.20.phar --testsuite=unit
 
   build-functional:
     name: Functional tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: [ '8.1', '8.2' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: openssl
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run PHPUnit tests
-        run: php7.3 bin/phpunit-8.4.3.phar --testsuite=functional
+        run: php bin/phpunit-9.5.20.phar --testsuite=functional
 
   build-infection:
     name: Infection tests
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        php-versions: [ '8.1', '8.2' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: openssl
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
 
       - name: Run Infection
-        run: php7.3 bin/infection.phar  --min-msi=70 --show-mutations
+        run: php bin/infection.phar  --min-msi=50 --show-mutations

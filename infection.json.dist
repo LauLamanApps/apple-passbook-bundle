@@ -12,7 +12,7 @@
         ]
     },
     "phpUnit": {
-        "customPath": "bin\/phpunit-8.4.3.phar"
+        "customPath": "bin\/phpunit-9.5.20.phar"
     },
     "logs": {
         "text": "infection.log"

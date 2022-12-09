@@ -5,14 +5,14 @@
         http://symfony.com/schema/routing/routing-1.0.xsd">
     <route id="laulamanapps_apple_passbook_bundle.device.register"
            path="/v1/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}"
-           controller="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController:register"
+           controller="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\RegisterController"
            methods="POST"/>
     <route id="laulamanapps_apple_passbook_bundle.device.unregister"
            path="/v1/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}/{serialNumber}"
-           controller="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController:unregister"
+           controller="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\UnregisterController"
            methods="DELETE"/>
     <route id="laulamanapps_apple_passbook_bundle.device.updated_passes"
            path="/v1/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}"
-           controller="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController:getSerialNumbers"
+           controller="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\SerialNumbersController"
            methods="GET"/>
 </routes>

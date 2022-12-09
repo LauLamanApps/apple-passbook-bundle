@@ -22,11 +22,22 @@
             <argument type="service" id="laulamanapps_apple_passbook.build.signer" />
         </service>
 
-        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController" autowire="true" public="true" />
-        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController" autowire="true" public="true" />
-        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\LogController" autowire="true" public="true" />
-
-        <service id="LauLamanApps\ApplePassbook\Build\Compiler" alias="laulamanapps_apple_passbook.build.compiler" public="false"/>
-        <service id="LauLamanApps\ApplePassbookBundle\PushNotification\PassbookUpdateNotifier" alias="laulamanapps_apple_passbook.push_notification.update_notifier" public="false"/>
+        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\RegisterController" autowire="true" public="true" >
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\SerialNumbersController" autowire="true" public="true" >
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\Device\UnregisterController" autowire="true" public="true" >
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController" autowire="true" public="true" >
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\LogController" autowire="true" public="true" >
+            <tag name="controller.service_arguments"/>
+        </service>
+        <service id="LauLamanApps\ApplePassbook\Build\Compiler" alias="laulamanapps_apple_passbook.build.compiler" public="false" />
+        <service id="LauLamanApps\ApplePassbookBundle\PushNotification\PassbookUpdateNotifier" alias="laulamanapps_apple_passbook.push_notification.update_notifier" public="false" />
     </services>
 </container>
