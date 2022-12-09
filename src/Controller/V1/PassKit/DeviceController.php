@@ -108,7 +108,7 @@ class DeviceController extends AbstractController
     }
 
     /**
-     * @Route("", methods={"GET"})
+     * @Route("/", methods={"GET"})
      */
     public function getSerialNumbers(
         string $deviceLibraryIdentifier,
