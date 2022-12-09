@@ -11,6 +11,7 @@ use LauLamanApps\ApplePassbook\Build\Signer;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
@@ -19,7 +20,7 @@ use ZipArchive;
 /**
  * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension
  */
-class ApplePassbookExtensionTest extends TestCase
+class ApplePassbookExtensionTest extends KernelTestCase
 {
     /**
      * @var ContainerBuilder
@@ -28,7 +29,12 @@ class ApplePassbookExtensionTest extends TestCase
 
     public function setUp(): void
     {
-        $this->container = new ContainerBuilder();
+        self::bootKernel([
+            'environment' => 'test',
+            'debug' => false,
+        ]);
+
+        $this->container = static::getContainer();
 
         $config = [
             'certificate' => '<pathToCertificate>',
