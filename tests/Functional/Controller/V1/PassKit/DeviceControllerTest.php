@@ -18,15 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class DeviceControllerTest extends TestCase
 {
-    /**
-     * @var TestKernel
-     */
-    private $kernel;
-
-    /**
-     * @var KernelBrowser
-     */
-    private $client;
+    private TestKernel $kernel;
+    private KernelBrowser $client;
 
     public function setUp(): void
     {
@@ -35,12 +28,17 @@ class DeviceControllerTest extends TestCase
         $this->client = new KernelBrowser($this->kernel);
     }
 
+    public function tearDown(): void
+    {
+        restore_exception_handler();
+    }
+
     /**
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
      * @dataProvider unAllowedMethodsForDeviceEndPoint
      */
-    public function testDeviceEndpointCalledWithWrongMethodReturns405($method): void
+    public function testDeviceEndpointCalledWithWrongMethodReturns405(string $method): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>/<serialNumber>';
 
@@ -62,7 +60,14 @@ class DeviceControllerTest extends TestCase
             $event->deviceRegistered();
         });
 
-        $this->client->request(Request::METHOD_POST, $uri,[],[],[], json_encode(['pushToken' => '<pushToken>']));
+        $this->client->request(
+            Request::METHOD_POST,
+            $uri,
+            [],
+            [],
+            ['HTTP_AUTHORIZATION' => 'ApplePass <authToken>'],
+            json_encode(['pushToken' => '<pushToken>']),
+        );
 
         $this->assertSame(201, $this->client->getResponse()->getStatusCode());
     }
@@ -80,7 +85,13 @@ class DeviceControllerTest extends TestCase
             $event->deviceUnregistered();
         });
 
-        $this->client->request(Request::METHOD_DELETE, $uri);
+        $this->client->request(
+            Request::METHOD_DELETE,
+            $uri,
+            [],
+            [],
+            ['HTTP_AUTHORIZATION' => 'ApplePass <authToken>'],
+        );
 
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
@@ -89,7 +100,7 @@ class DeviceControllerTest extends TestCase
      * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::getSerialNumbers
      * @dataProvider unAllowedMethodsForDevicesEndPoint
      */
-    public function testDevicesEndpointCalledWithWrongMethodReturns405($method): void
+    public function testDevicesEndpointCalledWithWrongMethodReturns405(string $method): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>';
 
@@ -116,7 +127,7 @@ class DeviceControllerTest extends TestCase
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
-    public function unAllowedMethodsForDeviceEndPoint(): array
+    public static function unAllowedMethodsForDeviceEndPoint(): array
     {
         return [
             'HEAD' => [Request::METHOD_HEAD],
@@ -130,7 +141,7 @@ class DeviceControllerTest extends TestCase
         ];
     }
 
-    public function unAllowedMethodsForDevicesEndPoint(): array
+    public static function unAllowedMethodsForDevicesEndPoint(): array
     {
         return [
             'POST' => [Request::METHOD_POST],

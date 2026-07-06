@@ -44,7 +44,7 @@ class PassbookControllerTest extends TestCase
         $request = $this->createRequest($authenticationToken);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('RetrieveUpdatedPassbookEvent was not handled. Please implement a listener for this event.');
+        $this->expectExceptionMessage('RetrieveUpdatedPassbookEvent was not handled. Please implement a listener for this event.');
 
         $controller = new PassbookController($compiler, $eventDispatcher);
         $controller->getUpdatedPassbook($request, $passTypeIdentifier, $serialNumber);
@@ -67,7 +67,7 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function(RetrieveUpdatedPassbookEvent $event) {
+            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) {
                 $event->notAuthorized();
 
                 return $event;
@@ -99,7 +99,7 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function(RetrieveUpdatedPassbookEvent $event) {
+            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) {
                 $event->notModified();
 
                 return $event;
@@ -131,7 +131,7 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function(RetrieveUpdatedPassbookEvent $event) {
+            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) {
                 $event->notFound();
 
                 return $event;
@@ -140,7 +140,7 @@ class PassbookControllerTest extends TestCase
         $request = $this->createRequest($authenticationToken);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('RetrieveUpdatedPassbookEvent was not handled correctly. Unexpected status was set.');
+        $this->expectExceptionMessage('RetrieveUpdatedPassbookEvent was not handled correctly. Unexpected status was set.');
 
         $controller = new PassbookController($compiler, $eventDispatcher);
         $controller->getUpdatedPassbook($request, $passTypeIdentifier, $serialNumber);
@@ -167,7 +167,7 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function(RetrieveUpdatedPassbookEvent $event) use ($passbook, $lastModified) {
+            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) use ($passbook, $lastModified) {
                 $event->setPassbook($passbook, $lastModified);
 
                 return $event;
@@ -181,7 +181,6 @@ class PassbookControllerTest extends TestCase
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
 
-        $this->assertHeader('File Transfer', 'Content-Description', $response);
         $this->assertHeader('File Transfer', 'Content-Description', $response);
         $this->assertHeader('application/vnd.apple.pkpass', 'Content-Type', $response);
         $this->assertHeader('filename="pass.pkpass"', 'Content-Disposition', $response);

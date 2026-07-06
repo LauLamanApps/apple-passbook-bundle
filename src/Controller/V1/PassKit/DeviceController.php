@@ -10,129 +10,108 @@ use LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent;
 use LauLamanApps\ApplePassbookBundle\Event\Status;
 use LogicException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/v1/devices/{deviceLibraryIdentifier}/registrations/{passTypeIdentifier}")
- */
-class DeviceController extends AbstractController
+class DeviceController
 {
     use AuthenticationToken;
 
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+    ) {
     }
 
-    /**
-     * @Route("/{serialNumber}", methods={"POST"})
-     */
     public function register(
         Request $request,
         string $deviceLibraryIdentifier,
         string $passTypeIdentifier,
-        string $serialNumber
+        string $serialNumber,
     ): JsonResponse {
         $event = new DeviceRegisteredEvent(
             $deviceLibraryIdentifier,
             $passTypeIdentifier,
             $serialNumber,
             $this->getAuthenticationToken($request),
-            json_decode($request->getContent())->pushToken
+            json_decode($request->getContent())->pushToken,
         );
 
-        /** @var Status $status */
         $status = $this->eventDispatcher->dispatch($event)->getStatus();
 
-        if ($status->isUnhandled()) {
+        if ($status === Status::Unhandled) {
             throw new LogicException('DeviceRegisteredEvent was not handled. Please implement a listener for this event.');
         }
 
-        if ($status->isNotAuthorized()) {
+        if ($status === Status::NotAuthorized) {
             return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($status->isAlreadyRegistered()) {
+        if ($status === Status::AlreadyRegistered) {
             return new JsonResponse([], Response::HTTP_OK);
         }
 
-        if ($status->isSuccessful()) {
+        if ($status === Status::Successful) {
             return new JsonResponse([], Response::HTTP_CREATED);
         }
 
         throw new LogicException('DeviceRegisteredEvent was not handled correctly. Unexpected status was set.');
     }
 
-    /**
-     * @Route("/{serialNumber}", methods={"DELETE"})
-     */
     public function unregister(
         Request $request,
         string $deviceLibraryIdentifier,
         string $passTypeIdentifier,
-        string $serialNumber
+        string $serialNumber,
     ): JsonResponse {
         $event = new DeviceUnregisteredEvent(
             $deviceLibraryIdentifier,
             $passTypeIdentifier,
             $serialNumber,
-            $this->getAuthenticationToken($request)
+            $this->getAuthenticationToken($request),
         );
 
-        /** @var Status $status */
         $status = $this->eventDispatcher->dispatch($event)->getStatus();
 
-        if ($status->isUnhandled()) {
+        if ($status === Status::Unhandled) {
             throw new LogicException('DeviceUnregisteredEvent was not handled. Please implement a listener for this event.');
         }
 
-        if ($status->isNotAuthorized()) {
+        if ($status === Status::NotAuthorized) {
             return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
         }
 
-        if ($status->isSuccessful()) {
+        if ($status === Status::Successful) {
             return new JsonResponse([], Response::HTTP_OK);
         }
 
         throw new LogicException('DeviceUnregisteredEvent was not handled correctly. Unexpected status was set.');
     }
 
-    /**
-     * @Route("", methods={"GET"})
-     */
     public function getSerialNumbers(
         string $deviceLibraryIdentifier,
-        string $passTypeIdentifier
+        string $passTypeIdentifier,
     ): JsonResponse {
         $event = new DeviceRequestUpdatedPassesEvent($deviceLibraryIdentifier, $passTypeIdentifier);
         $this->eventDispatcher->dispatch($event);
 
-        if ($event->getStatus()->isUnhandled()) {
+        if ($event->getStatus() === Status::Unhandled) {
             throw new LogicException('DeviceRequestUpdatedPassesEvent was not handled. Please implement a listener for this event.');
         }
 
-        if ($event->getStatus()->isNotFound()) {
+        if ($event->getStatus() === Status::NotFound) {
             return new JsonResponse([], Response::HTTP_NO_CONTENT);
         }
 
-        if ($event->getStatus()->isNotModified()) {
+        if ($event->getStatus() === Status::NotModified) {
             return new JsonResponse([], Response::HTTP_NOT_MODIFIED);
         }
 
-        if ($event->getStatus()->isSuccessful()) {
+        if ($event->getStatus() === Status::Successful) {
             return new JsonResponse([
                 'lastUpdated' => $event->getLastUpdated()->format(DateTimeImmutable::ATOM),
-                'serialNumbers' => $event->getSerialNumbers()
+                'serialNumbers' => $event->getSerialNumbers(),
             ]);
         }
 

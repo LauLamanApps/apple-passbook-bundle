@@ -45,7 +45,7 @@ class DeviceControllerTest extends TestCase
         $request = $this->createRequest($authenticationToken, ['pushToken' => $pushToken]);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('DeviceRegisteredEvent was not handled. Please implement a listener for this event.');
+        $this->expectExceptionMessage('DeviceRegisteredEvent was not handled. Please implement a listener for this event.');
 
         $controller = new DeviceController($eventDispatcher);
         $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
@@ -69,7 +69,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRegisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceRegisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceRegisteredEvent $event) {
                 $event->notAuthorized();
 
                 return $event;
@@ -102,7 +102,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRegisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceRegisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceRegisteredEvent $event) {
                 $event->alreadyRegistered();
 
                 return $event;
@@ -135,7 +135,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRegisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceRegisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceRegisteredEvent $event) {
                 $event->deviceRegistered();
 
                 return $event;
@@ -168,7 +168,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRegisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceRegisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceRegisteredEvent $event) {
                 $event->notModified();
 
                 return $event;
@@ -177,7 +177,7 @@ class DeviceControllerTest extends TestCase
         $request = $this->createRequest($authenticationToken, ['pushToken' => $pushToken]);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('DeviceRegisteredEvent was not handled correctly. Unexpected status was set.');
+        $this->expectExceptionMessage('DeviceRegisteredEvent was not handled correctly. Unexpected status was set.');
 
         $controller = new DeviceController($eventDispatcher);
         $controller->register($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
@@ -202,11 +202,10 @@ class DeviceControllerTest extends TestCase
             ->with($this->isInstanceOf(DeviceUnregisteredEvent::class))
             ->willReturnArgument(0);
 
-        $request = new Request();
-        $request->headers->add(['Authorization: ApplePass '. $authenticationToken]);
+        $request = $this->createRequest($authenticationToken);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('DeviceUnregisteredEvent was not handled. Please implement a listener for this event.');
+        $this->expectExceptionMessage('DeviceUnregisteredEvent was not handled. Please implement a listener for this event.');
 
         $controller = new DeviceController($eventDispatcher);
         $controller->unregister($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
@@ -229,7 +228,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceUnregisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceUnregisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceUnregisteredEvent $event) {
                 $event->notAuthorized();
 
                 return $event;
@@ -261,7 +260,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceUnregisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceUnregisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceUnregisteredEvent $event) {
                 $event->deviceUnregistered();
 
                 return $event;
@@ -293,7 +292,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceUnregisteredEvent::class))
-            ->will($this->returnCallback(function(DeviceUnregisteredEvent $event) {
+            ->will($this->returnCallback(function (DeviceUnregisteredEvent $event) {
                 $event->notModified();
 
                 return $event;
@@ -302,7 +301,7 @@ class DeviceControllerTest extends TestCase
         $request = $this->createRequest($authenticationToken);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('DeviceUnregisteredEvent was not handled correctly. Unexpected status was set.');
+        $this->expectExceptionMessage('DeviceUnregisteredEvent was not handled correctly. Unexpected status was set.');
 
         $controller = new DeviceController($eventDispatcher);
         $controller->unregister($request, $deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber);
@@ -326,7 +325,7 @@ class DeviceControllerTest extends TestCase
             ->willReturnArgument(0);
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('DeviceRequestUpdatedPassesEvent was not handled. Please implement a listener for this event.');
+        $this->expectExceptionMessage('DeviceRequestUpdatedPassesEvent was not handled. Please implement a listener for this event.');
 
         $controller = new DeviceController($eventDispatcher);
         $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);
@@ -346,7 +345,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRequestUpdatedPassesEvent::class))
-            ->will($this->returnCallback(function(DeviceRequestUpdatedPassesEvent $event) {
+            ->will($this->returnCallback(function (DeviceRequestUpdatedPassesEvent $event) {
                 $event->setSerialNumbers(['123', '456'], new DateTimeImmutable('2019-12-04T10:40:01+00:00'));
 
                 return $event;
@@ -374,7 +373,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRequestUpdatedPassesEvent::class))
-            ->will($this->returnCallback(function(DeviceRequestUpdatedPassesEvent $event) {
+            ->will($this->returnCallback(function (DeviceRequestUpdatedPassesEvent $event) {
                 $event->notFound();
 
                 return $event;
@@ -401,7 +400,7 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRequestUpdatedPassesEvent::class))
-            ->will($this->returnCallback(function(DeviceRequestUpdatedPassesEvent $event) {
+            ->will($this->returnCallback(function (DeviceRequestUpdatedPassesEvent $event) {
                 $event->notModified();
 
                 return $event;
@@ -428,14 +427,14 @@ class DeviceControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(DeviceRequestUpdatedPassesEvent::class))
-            ->will($this->returnCallback(function(DeviceRequestUpdatedPassesEvent $event) {
+            ->will($this->returnCallback(function (DeviceRequestUpdatedPassesEvent $event) {
                 $event->notAuthorized();
 
                 return $event;
             }));
 
         $this->expectException(LogicException::class);
-        $this->expectDeprecationMessage('DeviceRequestUpdatedPassesEvent was not handled correctly. Unexpected status was set.');
+        $this->expectExceptionMessage('DeviceRequestUpdatedPassesEvent was not handled correctly. Unexpected status was set.');
 
         $controller = new DeviceController($eventDispatcher);
         $controller->getSerialNumbers($deviceLibraryIdentifier, $passTypeIdentifier);

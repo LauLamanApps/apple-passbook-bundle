@@ -9,43 +9,16 @@ use LauLamanApps\ApplePassbook\Passbook;
 
 final class RetrieveUpdatedPassbookEvent extends AbstractEvent
 {
-    /**
-     * @var string
-     */
-    private $passTypeIdentifier;
+    private ?Passbook $passbook = null;
+    private ?DateTimeImmutable $lastModified = null;
 
-    /**
-     * @var string
-     */
-    private $serialNumber;
-
-    /**
-     * @var string
-     */
-    private $authenticationToken;
-
-    /**
-     * @var DateTimeImmutable|null
-     */
-    private $updatedSince;
-
-    /**
-     * @var Passbook|null
-     */
-    private $passbook;
-
-    /**
-     * @var DateTimeImmutable|null
-     */
-    private $lastModified;
-
-    public function __construct(string $passTypeIdentifier, string $serialNumber, string $authenticationToken, ?DateTimeImmutable $updatedSince = null)
-    {
+    public function __construct(
+        private readonly string $passTypeIdentifier,
+        private readonly string $serialNumber,
+        private readonly string $authenticationToken,
+        private readonly ?DateTimeImmutable $updatedSince = null,
+    ) {
         parent::__construct();
-        $this->passTypeIdentifier = $passTypeIdentifier;
-        $this->serialNumber = $serialNumber;
-        $this->authenticationToken = $authenticationToken;
-        $this->updatedSince = $updatedSince;
     }
 
     public function setPassbook(Passbook $passbook, DateTimeImmutable $lastModified): void

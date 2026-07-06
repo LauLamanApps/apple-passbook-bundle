@@ -29,11 +29,6 @@ class ConfigurationTest extends TestCase
             [[]],
             'certificate'
         );
-
-        $this->assertConfigurationIsInvalid(
-            [['certificate' => '<certificate>']],
-            'password'
-        );
     }
 
     /**
@@ -44,15 +39,15 @@ class ConfigurationTest extends TestCase
         $this->assertProcessedConfigurationEquals(
             [
                 [
-                    "certificate" => "<pathToCertificate>",
-                    "password" => "<certificatePassword>",
+                    'certificate' => '<pathToCertificate>',
                 ]
             ],
             [
                 'certificate' => '<pathToCertificate>',
-                'password' => '<certificatePassword>',
+                'password' => null,
                 'team_identifier' => null,
                 'pass_type_identifier' => null,
+                'environment' => 'production',
             ]
         );
     }
@@ -65,10 +60,11 @@ class ConfigurationTest extends TestCase
         $this->assertProcessedConfigurationEquals(
             [
                 [
-                    "certificate" => "<pathToCertificate>",
-                    "password" => "<certificatePassword>",
+                    'certificate' => '<pathToCertificate>',
+                    'password' => '<certificatePassword>',
                     'team_identifier' => '<TeamId>',
                     'pass_type_identifier' => '<PassTypeId>',
+                    'environment' => 'sandbox',
                 ]
             ],
             [
@@ -76,6 +72,7 @@ class ConfigurationTest extends TestCase
                 'password' => '<certificatePassword>',
                 'team_identifier' => '<TeamId>',
                 'pass_type_identifier' => '<PassTypeId>',
+                'environment' => 'sandbox',
             ]
         );
     }

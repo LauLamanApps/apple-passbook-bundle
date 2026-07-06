@@ -8,39 +8,36 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class AbstractEvent extends Event
 {
-    /**
-     * @var Status
-     */
-    private $status;
+    private Status $status;
 
     public function __construct()
     {
-        $this->status = Status::unhandled();
+        $this->status = Status::Unhandled;
     }
 
     final public function notAuthorized(): void
     {
-        $this->status = Status::notAuthorized();
+        $this->status = Status::NotAuthorized;
     }
 
     final public function notFound(): void
     {
-        $this->status = Status::notFound();
+        $this->status = Status::NotFound;
     }
 
     final public function notModified(): void
     {
-        $this->status = Status::notModified();
+        $this->status = Status::NotModified;
     }
 
     final public function alreadyRegistered(): void
     {
-        $this->status = Status::alreadyRegistered();
+        $this->status = Status::AlreadyRegistered;
     }
 
     final protected function successful(): void
     {
-        $this->status = Status::successful();
+        $this->status = Status::Successful;
     }
 
     final public function getStatus(): Status

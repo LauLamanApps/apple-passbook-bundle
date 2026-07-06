@@ -31,21 +31,21 @@ class AbstractEventTest extends TestCase
             }
         };
 
-        $this->assertEquals(Status::unhandled(), $event->getStatus());
+        $this->assertSame(Status::Unhandled, $event->getStatus());
 
         $event->notAuthorized();
-        $this->assertEquals(Status::notAuthorized(), $event->getStatus());
+        $this->assertSame(Status::NotAuthorized, $event->getStatus());
 
         $event->notFound();
-        $this->assertEquals(Status::notFound(), $event->getStatus());
+        $this->assertSame(Status::NotFound, $event->getStatus());
 
         $event->notModified();
-        $this->assertEquals(Status::notModified(), $event->getStatus());
+        $this->assertSame(Status::NotModified, $event->getStatus());
 
         $event->alreadyRegistered();
-        $this->assertEquals(Status::alreadyRegistered(), $event->getStatus());
+        $this->assertSame(Status::AlreadyRegistered, $event->getStatus());
 
         $event->callSuccessful();
-        $this->assertEquals(Status::successful(), $event->getStatus());
+        $this->assertSame(Status::Successful, $event->getStatus());
     }
 }

@@ -36,14 +36,14 @@ class RetrieveUpdatedPassbookEventTest extends TestCase
         $event = new RetrieveUpdatedPassbookEvent($passTypeIdentifier, $serialNumber, $authenticationToken, $updatedSince);
 
         $this->assertInstanceOf(AbstractEvent::class, $event);
-        $this->assertEquals(Status::unhandled(), $event->getStatus());
+        $this->assertSame(Status::Unhandled, $event->getStatus());
         $this->assertSame($passTypeIdentifier, $event->getPassTypeIdentifier());
         $this->assertSame($serialNumber, $event->getSerialNumber());
         $this->assertSame($authenticationToken, $event->getAuthenticationToken());
         $this->assertSame($updatedSince, $event->getUpdatedSince());
 
         $event->setPassbook($passbook, $lastModified);
-        $this->assertEquals(Status::successful(), $event->getStatus());
+        $this->assertSame(Status::Successful, $event->getStatus());
         $this->assertEquals($passbook, $event->getPassbook());
         $this->assertEquals($lastModified, $event->getLastModified());
     }

@@ -31,7 +31,7 @@ class DeviceRegisteredEventTest extends TestCase
         $event = new DeviceRegisteredEvent($deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber, $authenticationToken, $pushToken);
 
         $this->assertInstanceOf(AbstractEvent::class, $event);
-        $this->assertEquals(Status::unhandled(), $event->getStatus());
+        $this->assertSame(Status::Unhandled, $event->getStatus());
         $this->assertSame($deviceLibraryIdentifier, $event->getDeviceLibraryIdentifier());
         $this->assertSame($passTypeIdentifier, $event->getPassTypeIdentifier());
         $this->assertSame($serialNumber, $event->getSerialNumber());
@@ -39,6 +39,6 @@ class DeviceRegisteredEventTest extends TestCase
         $this->assertSame($pushToken, $event->getPushToken());
 
         $event->deviceRegistered();
-        $this->assertEquals(Status::successful(), $event->getStatus());
+        $this->assertSame(Status::Successful, $event->getStatus());
     }
 }

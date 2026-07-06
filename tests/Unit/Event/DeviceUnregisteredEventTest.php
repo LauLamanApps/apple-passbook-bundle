@@ -32,13 +32,13 @@ class DeviceUnregisteredEventTest extends TestCase
         $event = new DeviceUnregisteredEvent($deviceLibraryIdentifier, $passTypeIdentifier, $serialNumber, $authenticationToken);
 
         $this->assertInstanceOf(AbstractEvent::class, $event);
-        $this->assertEquals(Status::unhandled(), $event->getStatus());
+        $this->assertSame(Status::Unhandled, $event->getStatus());
         $this->assertSame($deviceLibraryIdentifier, $event->getDeviceLibraryIdentifier());
         $this->assertSame($passTypeIdentifier, $event->getPassTypeIdentifier());
         $this->assertSame($serialNumber, $event->getSerialNumber());
         $this->assertSame($authenticationToken, $event->getAuthenticationToken());
 
         $event->deviceUnregistered();
-        $this->assertEquals(Status::successful(), $event->getStatus());
+        $this->assertSame(Status::Successful, $event->getStatus());
     }
 }

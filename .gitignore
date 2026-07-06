@@ -6,8 +6,6 @@ composer.lock
 .php_cs.cache
 vendor/
 bin/*
-!bin/infection.phar
-!bin/phpunit-8.4.3.phar
-infection.log
 .phpunit.result.cache
+.phpunit.cache/
 var/

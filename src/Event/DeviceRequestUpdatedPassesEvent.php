@@ -8,42 +8,22 @@ use DateTimeImmutable;
 
 final class DeviceRequestUpdatedPassesEvent extends AbstractEvent
 {
-    /**
-     * @var string
-     */
-    private $deviceLibraryIdentifier;
+    private ?DateTimeImmutable $lastUpdated = null;
 
-    /**
-     * @var string
-     */
-    private $passTypeIdentifier;
-
-    /**
-     * @var DateTimeImmutable|null
-     */
-    private $passesUpdatedSince;
-
-    /**
-     * @var DateTimeImmutable|null
-     */
-    private $lastUpdated;
-
-    /**
-     * @var string[]
-     */
-    private $serialNumbers;
+    /** @var string[] */
+    private array $serialNumbers = [];
 
     public function __construct(
-        string $deviceLibraryIdentifier,
-        string $passTypeIdentifier,
-        DateTimeImmutable $passesUpdatedSince = null
+        private readonly string $deviceLibraryIdentifier,
+        private readonly string $passTypeIdentifier,
+        private readonly ?DateTimeImmutable $passesUpdatedSince = null,
     ) {
-        $this->deviceLibraryIdentifier = $deviceLibraryIdentifier;
-        $this->passTypeIdentifier = $passTypeIdentifier;
-        $this->passesUpdatedSince = $passesUpdatedSince;
         parent::__construct();
     }
 
+    /**
+     * @param string[] $serialNumbers
+     */
     public function setSerialNumbers(array $serialNumbers, DateTimeImmutable $lastUpdated): void
     {
         $this->successful();
@@ -71,6 +51,9 @@ final class DeviceRequestUpdatedPassesEvent extends AbstractEvent
         return $this->lastUpdated;
     }
 
+    /**
+     * @return string[]
+     */
     public function getSerialNumbers(): array
     {
         return $this->serialNumbers;
