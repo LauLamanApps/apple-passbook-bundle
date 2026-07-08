@@ -5,32 +5,36 @@ declare(strict_types=1);
 namespace LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @Route("/v1/log")
- */
-class LogController extends AbstractController
+class LogController
 {
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private const MAX_LOG_ENTRIES = 50;
+    private const MAX_LOG_ENTRY_LENGTH = 4096;
 
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private readonly LoggerInterface $logger,
+    ) {
     }
 
-    /**
-     * @Route("", methods={"POST"})
-     */
     public function log(Request $request): JsonResponse
     {
-        $this->logger->info('Apple passbook Log request', json_decode($request->getContent(), true));
+        $content = json_decode($request->getContent(), true);
+
+        if (!is_array($content) || !isset($content['logs']) || !is_array($content['logs'])) {
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        }
+
+        $logs = [];
+        foreach (array_slice($content['logs'], 0, self::MAX_LOG_ENTRIES) as $log) {
+            if (is_string($log)) {
+                $logs[] = substr($log, 0, self::MAX_LOG_ENTRY_LENGTH);
+            }
+        }
+
+        $this->logger->info('Apple PassKit log request', ['logs' => $logs]);
 
         return new JsonResponse();
     }

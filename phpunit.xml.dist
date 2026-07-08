@@ -1,30 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
-<phpunit
-        backupGlobals               = "false"
-        backupStaticAttributes      = "false"
-        colors                      = "true"
-        convertErrorsToExceptions   = "true"
-        convertNoticesToExceptions  = "true"
-        convertWarningsToExceptions = "true"
-        processIsolation            = "false"
-        stopOnFailure               = "false"
-        bootstrap                   = "phpunit.bootstrap.php" >
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         backupGlobals="false"
+         colors="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         bootstrap="phpunit.bootstrap.php"
+         cacheDirectory=".phpunit.cache"
+>
+    <source>
+        <include>
             <directory suffix=".php">./src</directory>
-            <exclude>
-                <directory suffix=".php">./tests</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+        </include>
+        <exclude>
+            <directory suffix=".php">./tests</directory>
+        </exclude>
+    </source>
     <testsuites>
         <testsuite name="unit">
             <directory>./tests/Unit</directory>
-        </testsuite>
-        <testsuite name="integration">
-            <directory>./tests/Integration</directory>
         </testsuite>
         <testsuite name="functional">
             <directory>./tests/Functional</directory>

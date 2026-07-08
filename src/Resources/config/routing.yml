@@ -1,3 +1,0 @@
-laulamanapps_apple_passbook_bundle:
-  resource: "@ApplePassbookBundle/Controller"
-  type: annotation

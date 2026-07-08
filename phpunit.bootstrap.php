@@ -1,9 +1,8 @@
 <?php
-require_once('vendor/autoload.php');
-// Add the 'tests/' directory to the include path for unit tests, as we have Test implementation classes that we need to
-// have, but don't want to include in projects that include this library
-$loader = new \Composer\Autoload\ClassLoader();
-$loader->add('LauLamanApps\\Apple', ['src/']);
-$loader->add('LauLamanApps\\Apple\\Tests', ['tests/']);
-$loader->register();
-$loader->setUseIncludePath(true);
+
+$loader = require 'vendor/autoload.php';
+
+// When the core lib is installed via a path repository (symlink), composer
+// incorrectly maps its autoload-dev namespace to this project's directories.
+// Remove the conflicting mapping so PHPUnit doesn't try to load core lib tests.
+$loader->setPsr4('LauLamanApps\\ApplePassbook\\Tests\\', []);

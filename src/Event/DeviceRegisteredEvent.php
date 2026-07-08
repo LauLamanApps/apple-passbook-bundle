@@ -6,44 +6,14 @@ namespace LauLamanApps\ApplePassbookBundle\Event;
 
 final class DeviceRegisteredEvent extends AbstractEvent
 {
-    /**
-     * @var string
-     */
-    private $deviceLibraryIdentifier;
-
-    /**
-     * @var string
-     */
-    private $passTypeIdentifier;
-
-    /**
-     * @var string
-     */
-    private $serialNumber;
-
-    /**
-     * @var string
-     */
-    private $authenticationToken;
-
-    /**
-     * @var string
-     */
-    private $pushToken;
-
     public function __construct(
-        string $deviceLibraryIdentifier,
-        string $passTypeIdentifier,
-        string $serialNumber,
-        string $authenticationToken,
-        string $pushToken
+        private readonly string $deviceLibraryIdentifier,
+        private readonly string $passTypeIdentifier,
+        private readonly string $serialNumber,
+        private readonly string $authenticationToken,
+        private readonly string $pushToken,
     ) {
         parent::__construct();
-        $this->deviceLibraryIdentifier = $deviceLibraryIdentifier;
-        $this->passTypeIdentifier = $passTypeIdentifier;
-        $this->serialNumber = $serialNumber;
-        $this->authenticationToken = $authenticationToken;
-        $this->pushToken = $pushToken;
     }
 
     public function getDeviceLibraryIdentifier(): string
@@ -64,6 +34,14 @@ final class DeviceRegisteredEvent extends AbstractEvent
     public function getAuthenticationToken(): string
     {
         return $this->authenticationToken;
+    }
+
+    /**
+     * Timing-safe comparison of the request's authentication token against the expected token.
+     */
+    public function isAuthenticatedBy(#[\SensitiveParameter] string $expectedToken): bool
+    {
+        return $expectedToken !== '' && hash_equals($expectedToken, $this->authenticationToken);
     }
 
     public function getPushToken(): string

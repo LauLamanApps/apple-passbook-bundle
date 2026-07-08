@@ -1,6 +1,6 @@
 {
     "name": "laulamanapps/apple-passbook-bundle",
-    "description": "Generate Apple Passbooks from your Symfony application",
+    "description": "Generate Apple Wallet passes (PassKit) from your Symfony application",
     "keywords": [
         "apple",
         "passbook",
@@ -24,35 +24,36 @@
     ],
     "autoload": {
         "psr-4": {
-            "LauLamanApps\\ApplePassbookBundle\\": ["src/"]
+            "LauLamanApps\\ApplePassbookBundle\\": [
+                "src/"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LauLamanApps\\ApplePassbookBundle\\Tests\\": ["tests/"]
+            "LauLamanApps\\ApplePassbookBundle\\Tests\\": [
+                "tests/"
+            ]
         }
     },
     "require": {
-        "php": ">=7.3",
-        "laulamanapps/apple-passbook": "^1.1",
-        "ext-openssl": "*"
+        "php": "^8.1",
+        "laulamanapps/apple-passbook": "^2.0",
+        "ext-openssl": "*",
+        "symfony/http-foundation": "^6.4|^7.0|^8.0",
+        "symfony/routing": "^6.4|^7.0|^8.0",
+        "symfony/event-dispatcher": "^6.4|^7.0|^8.0",
+        "symfony/framework-bundle": "^6.4|^7.0|^8.0"
     },
     "require-dev": {
-        "symfony/http-foundation": "^5.1",
-        "symfony/routing": "^5.1",
-        "symfony/event-dispatcher": "^5.1",
-        "symfony/framework-bundle": "^5.1",
-        "symfony/yaml": "^5.1",
-        "symfony/browser-kit": "^5.1",
-        "matthiasnoback/symfony-config-test": "^4.1",
+        "symfony/yaml": "^6.4|^7.0|^8.0",
+        "symfony/browser-kit": "^6.4|^7.0|^8.0",
+        "matthiasnoback/symfony-config-test": "^4.3|^5.0",
+        "phpunit/phpunit": "^10.0|^11.0",
         "ext-zip": "*"
     },
-    "suggest": {
-        "symfony/http-foundation": "^5.1",
-        "symfony/routing": "^5.1",
-        "symfony/event-dispatcher": "^5.1",
-        "symfony/framework-bundle": "^5.1"
-    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "config": {
         "bin-dir": "bin"
     }

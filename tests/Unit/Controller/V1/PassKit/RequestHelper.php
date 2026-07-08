@@ -10,10 +10,10 @@ trait RequestHelper
 {
     protected function createRequest(string $authenticationToken, ?array $body = null): Request
     {
-        $body = $body === null ? []: json_encode($body);
+        $content = $body === null ? '' : json_encode($body);
 
-        $request = new Request([], [], [], [], [], [], $body);
-        $request->headers->add(['Authorization: ApplePass '. $authenticationToken]);
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->headers->set('Authorization', 'ApplePass ' . $authenticationToken);
 
         return $request;
     }

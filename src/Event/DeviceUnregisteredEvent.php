@@ -4,40 +4,14 @@ declare(strict_types=1);
 
 namespace LauLamanApps\ApplePassbookBundle\Event;
 
-
 final class DeviceUnregisteredEvent extends AbstractEvent
 {
-    /**
-     * @var string
-     */
-    private $deviceLibraryIdentifier;
-
-    /**
-     * @var string
-     */
-    private $passTypeIdentifier;
-
-    /**
-     * @var string
-     */
-    private $serialNumber;
-
-    /**
-     * @var string
-     */
-    private $authenticationToken;
-
     public function __construct(
-        string $deviceLibraryIdentifier,
-        string $passTypeIdentifier,
-        string $serialNumber,
-        string $authenticationToken
+        private readonly string $deviceLibraryIdentifier,
+        private readonly string $passTypeIdentifier,
+        private readonly string $serialNumber,
+        private readonly string $authenticationToken,
     ) {
-        $this->deviceLibraryIdentifier = $deviceLibraryIdentifier;
-        $this->passTypeIdentifier = $passTypeIdentifier;
-        $this->serialNumber = $serialNumber;
-        $this->authenticationToken = $authenticationToken;
-
         parent::__construct();
     }
 
@@ -59,6 +33,14 @@ final class DeviceUnregisteredEvent extends AbstractEvent
     public function getAuthenticationToken(): string
     {
         return $this->authenticationToken;
+    }
+
+    /**
+     * Timing-safe comparison of the request's authentication token against the expected token.
+     */
+    public function isAuthenticatedBy(#[\SensitiveParameter] string $expectedToken): bool
+    {
+        return $expectedToken !== '' && hash_equals($expectedToken, $this->authenticationToken);
     }
 
     public function deviceUnregistered(): void

@@ -4,27 +4,25 @@ declare(strict_types=1);
 
 namespace LauLamanApps\ApplePassbookBundle\Tests\Unit\DependencyInjection;
 
+use LauLamanApps\ApplePassbook\Build\ApnsEnvironment;
 use LauLamanApps\ApplePassbook\Build\Compiler;
 use LauLamanApps\ApplePassbook\Build\Compressor;
 use LauLamanApps\ApplePassbook\Build\ManifestGenerator;
+use LauLamanApps\ApplePassbook\Build\Notifier;
 use LauLamanApps\ApplePassbook\Build\Signer;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 use ZipArchive;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension
- */
+#[CoversClass(ApplePassbookExtension::class)]
 class ApplePassbookExtensionTest extends TestCase
 {
-    /**
-     * @var ContainerBuilder
-     */
-    private $container;
+    private ContainerBuilder $container;
 
     public function setUp(): void
     {
@@ -42,9 +40,6 @@ class ApplePassbookExtensionTest extends TestCase
         $extension->load([$config], $this->container);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::getAlias()
-     */
     public function testGetAlias(): void
     {
         $extension = new ApplePassbookExtension();
@@ -52,9 +47,6 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertSame(Configuration::ROOT, $extension->getAlias());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testCompilerIsConfigured(): void
     {
         $expectedArguments = [
@@ -69,17 +61,11 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertAlias(Compiler::class, 'laulamanapps_apple_passbook.build.compiler');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testManifestGeneratorIsConfigured(): void
     {
         $this->assertDefinition(ManifestGenerator::class, 'laulamanapps_apple_passbook.build.manifestgenerator');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testSignerIsConfigured(): void
     {
         $expectedArguments = [
@@ -90,30 +76,51 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertDefinition(Signer::class, 'laulamanapps_apple_passbook.build.signer', $expectedArguments);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testZipArchiveIsConfigured(): void
     {
         $this->assertDefinition(ZipArchive::class, 'laulamanapps_apple_passbook.php.zip_archive');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testCompressorIsConfigured(): void
     {
-        $expectedArguments = ['laulamanapps_apple_passbook.php.zip_archive',];
+        $expectedArguments = ['laulamanapps_apple_passbook.php.zip_archive'];
         $this->assertDefinition(Compressor::class, 'laulamanapps_apple_passbook.build.compressor', $expectedArguments);
     }
 
+    public function testNotifierIsConfigured(): void
+    {
+        $definition = $this->container->getDefinition('laulamanapps_apple_passbook.build.notifier');
+
+        $this->assertSame(Notifier::class, $definition->getClass());
+        $this->assertSame('<pathToCertificate>', $definition->getArgument(0));
+        $this->assertSame('<certificatePassword>', $definition->getArgument(1));
+        $this->assertSame(ApnsEnvironment::Production, $definition->getArgument(2));
+
+        $this->assertAlias(Notifier::class, 'laulamanapps_apple_passbook.build.notifier');
+    }
+
+    public function testNotifierSandboxEnvironmentIsConfigured(): void
+    {
+        $container = new ContainerBuilder();
+
+        $config = [
+            'certificate' => '<pathToCertificate>',
+            'environment' => 'sandbox',
+        ];
+
+        $extension = new ApplePassbookExtension();
+        $extension->load([$config], $container);
+
+        $definition = $container->getDefinition('laulamanapps_apple_passbook.build.notifier');
+        $this->assertSame(ApnsEnvironment::Sandbox, $definition->getArgument(2));
+    }
 
     private function assertDefinition(string $class, string $serviceId, ?array $expectedArguments = null): void
     {
         try {
             $definition = $this->container->getDefinition($serviceId);
         } catch (ServiceNotFoundException $e) {
-            $this->fail('Could not load service definition for service id '. $serviceId);
+            $this->fail('Could not load service definition for service id ' . $serviceId);
 
             return;
         }
@@ -129,11 +136,11 @@ class ApplePassbookExtensionTest extends TestCase
             foreach ($definition->getArguments() as $argument) {
                 /** @var $argument Reference */
 
-                if (empty($argument)) {
+                if (empty($argument) && $argument !== false) {
                     continue;
                 }
 
-                $this->assertContains((string)$argument, $expectedArguments);
+                $this->assertContains(is_bool($argument) ? $argument : (string) $argument, $expectedArguments);
             }
         }
     }
@@ -143,11 +150,11 @@ class ApplePassbookExtensionTest extends TestCase
         try {
             $alias = $this->container->getAlias($aliasId);
         } catch (ServiceNotFoundException $e) {
-            $this->fail('Could not load service definition for service id '. $serviceId);
+            $this->fail('Could not load service definition for service id ' . $serviceId);
 
             return;
         }
 
-        $this->assertSame((string)$alias, $serviceId);
+        $this->assertSame((string) $alias, $serviceId);
     }
 }
