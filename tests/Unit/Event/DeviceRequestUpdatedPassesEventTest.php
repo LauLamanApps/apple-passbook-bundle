@@ -8,19 +8,12 @@ use DateTimeImmutable;
 use LauLamanApps\ApplePassbookBundle\Event\AbstractEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent;
 use LauLamanApps\ApplePassbookBundle\Event\Status;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
+#[CoversClass(DeviceRequestUpdatedPassesEvent::class)]
 class DeviceRequestUpdatedPassesEventTest extends TestCase
 {
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::__construct
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::getDeviceLibraryIdentifier
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::getPassTypeIdentifier
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::getPassesUpdatedSince
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::getLastUpdated
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::setSerialNumbers
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent::getSerialNumbers
-     */
     public function testConstructor(): void
     {
         $deviceLibraryIdentifier = '<deviceLibraryIdentifier>';

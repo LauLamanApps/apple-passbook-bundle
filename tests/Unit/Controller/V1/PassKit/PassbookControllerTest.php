@@ -10,22 +10,17 @@ use LauLamanApps\ApplePassbook\Passbook;
 use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController;
 use LauLamanApps\ApplePassbookBundle\Event\RetrieveUpdatedPassbookEvent;
 use LogicException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController
- */
+#[CoversClass(PassbookController::class)]
 class PassbookControllerTest extends TestCase
 {
     use RequestHelper;
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::getUpdatedPassbook
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::__construct
-     */
     public function testRegisterDispatchesEventAndThrowsWhenEventIsNotHandled(): void
     {
         $passTypeIdentifier = '<passTypeIdentifier>';
@@ -50,10 +45,6 @@ class PassbookControllerTest extends TestCase
         $controller->getUpdatedPassbook($request, $passTypeIdentifier, $serialNumber);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::getUpdatedPassbook
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::__construct
-     */
     public function testRegisterReturnsHttpUnauthorized(): void
     {
         $passTypeIdentifier = '<passTypeIdentifier>';
@@ -67,11 +58,11 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) {
+            ->willReturnCallback(function (RetrieveUpdatedPassbookEvent $event) {
                 $event->notAuthorized();
 
                 return $event;
-            }));
+            });
 
         $request = $this->createRequest($authenticationToken);
 
@@ -82,10 +73,6 @@ class PassbookControllerTest extends TestCase
         $this->assertSame(JsonResponse::HTTP_UNAUTHORIZED, $response->getStatusCode());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::getUpdatedPassbook
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::__construct
-     */
     public function testRegisterReturnsHttpNotModified(): void
     {
         $passTypeIdentifier = '<passTypeIdentifier>';
@@ -99,11 +86,11 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) {
+            ->willReturnCallback(function (RetrieveUpdatedPassbookEvent $event) {
                 $event->notModified();
 
                 return $event;
-            }));
+            });
 
         $request = $this->createRequest($authenticationToken);
 
@@ -114,10 +101,6 @@ class PassbookControllerTest extends TestCase
         $this->assertSame(JsonResponse::HTTP_NOT_MODIFIED, $response->getStatusCode());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::getUpdatedPassbook
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::__construct
-     */
     public function testRegisterThrowsWhenEventWasNotHandledCorrectly(): void
     {
         $passTypeIdentifier = '<passTypeIdentifier>';
@@ -131,11 +114,11 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) {
-                $event->notFound();
+            ->willReturnCallback(function (RetrieveUpdatedPassbookEvent $event) {
+                $event->alreadyRegistered();
 
                 return $event;
-            }));
+            });
 
         $request = $this->createRequest($authenticationToken);
 
@@ -146,10 +129,33 @@ class PassbookControllerTest extends TestCase
         $controller->getUpdatedPassbook($request, $passTypeIdentifier, $serialNumber);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::getUpdatedPassbook
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\PassbookController::__construct
-     */
+    public function testRegisterReturnsHttpNotFound(): void
+    {
+        $passTypeIdentifier = '<passTypeIdentifier>';
+        $serialNumber = '<serialNumber>';
+        $authenticationToken = '<authenticationToken>';
+
+        $compiler = $this->createMock(Compiler::class);
+
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $eventDispatcher
+            ->expects($this->once())
+            ->method('dispatch')
+            ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
+            ->willReturnCallback(function (RetrieveUpdatedPassbookEvent $event) {
+                $event->notFound();
+
+                return $event;
+            });
+
+        $request = $this->createRequest($authenticationToken);
+
+        $controller = new PassbookController($compiler, $eventDispatcher);
+        $response = $controller->getUpdatedPassbook($request, $passTypeIdentifier, $serialNumber);
+
+        $this->assertSame(404, $response->getStatusCode());
+    }
+
     public function testRegisterReturnsPassbook(): void
     {
         $passTypeIdentifier = '<passTypeIdentifier>';
@@ -167,11 +173,11 @@ class PassbookControllerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->isInstanceOf(RetrieveUpdatedPassbookEvent::class))
-            ->will($this->returnCallback(function (RetrieveUpdatedPassbookEvent $event) use ($passbook, $lastModified) {
+            ->willReturnCallback(function (RetrieveUpdatedPassbookEvent $event) use ($passbook, $lastModified) {
                 $event->setPassbook($passbook, $lastModified);
 
                 return $event;
-            }));
+            });
 
         $request = $this->createRequest($authenticationToken);
 

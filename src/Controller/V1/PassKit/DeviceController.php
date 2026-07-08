@@ -30,12 +30,19 @@ class DeviceController
         string $passTypeIdentifier,
         string $serialNumber,
     ): JsonResponse {
+        $content = json_decode($request->getContent(), true);
+        $pushToken = is_array($content) ? ($content['pushToken'] ?? null) : null;
+
+        if (!is_string($pushToken) || $pushToken === '') {
+            return new JsonResponse([], Response::HTTP_BAD_REQUEST);
+        }
+
         $event = new DeviceRegisteredEvent(
             $deviceLibraryIdentifier,
             $passTypeIdentifier,
             $serialNumber,
             $this->getAuthenticationToken($request),
-            json_decode($request->getContent())->pushToken,
+            $pushToken,
         );
 
         $status = $this->eventDispatcher->dispatch($event)->getStatus();
@@ -90,10 +97,15 @@ class DeviceController
     }
 
     public function getSerialNumbers(
+        Request $request,
         string $deviceLibraryIdentifier,
         string $passTypeIdentifier,
     ): JsonResponse {
-        $event = new DeviceRequestUpdatedPassesEvent($deviceLibraryIdentifier, $passTypeIdentifier);
+        $event = new DeviceRequestUpdatedPassesEvent(
+            $deviceLibraryIdentifier,
+            $passTypeIdentifier,
+            $this->parsePassesUpdatedSince($request),
+        );
         $this->eventDispatcher->dispatch($event);
 
         if ($event->getStatus() === Status::Unhandled) {
@@ -116,5 +128,20 @@ class DeviceController
         }
 
         throw new LogicException('DeviceRequestUpdatedPassesEvent was not handled correctly. Unexpected status was set.');
+    }
+
+    private function parsePassesUpdatedSince(Request $request): ?DateTimeImmutable
+    {
+        $passesUpdatedSince = $request->query->get('passesUpdatedSince');
+
+        if (!is_string($passesUpdatedSince) || $passesUpdatedSince === '') {
+            return null;
+        }
+
+        try {
+            return new DateTimeImmutable($passesUpdatedSince);
+        } catch (\Exception) {
+            return null;
+        }
     }
 }

@@ -6,11 +6,10 @@ namespace LauLamanApps\ApplePassbookBundle\Tests\Unit\DependencyInjection;
 
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration;
 use Matthias\SymfonyConfigTest\PhpUnit\ConfigurationTestCaseTrait;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration
- */
+#[CoversClass(Configuration::class)]
 class ConfigurationTest extends TestCase
 {
     use ConfigurationTestCaseTrait;
@@ -20,9 +19,6 @@ class ConfigurationTest extends TestCase
         return new Configuration();
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration::getConfigTreeBuilder
-     */
     public function testRequiredConfiguration(): void
     {
         $this->assertConfigurationIsInvalid(
@@ -31,9 +27,6 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration::getConfigTreeBuilder
-     */
     public function testDefaultConfiguration(): void
     {
         $this->assertProcessedConfigurationEquals(
@@ -52,9 +45,6 @@ class ConfigurationTest extends TestCase
         );
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration::getConfigTreeBuilder
-     */
     public function testFullConfiguration(): void
     {
         $this->assertProcessedConfigurationEquals(

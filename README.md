@@ -55,6 +55,10 @@ APPLE_PASSBOOK_WEB_SERVICE_URL='https://example.com/'
 ###< laulamanapps/apple-passbook-bundle ###
 ```
 
+> **Security note:** always reference the certificate password through `%env(...)%` as shown above.
+> A literal password in the bundle configuration would be written into Symfony's compiled
+> container in `var/cache`.
+
 ### Configuration reference
 
 | Key                   | Required | Default        | Description                                     |
@@ -201,7 +205,9 @@ final class ApplePassbookSubscriber implements EventSubscriberInterface
     {
         $passbook = $this->passbookRepository->getBySerial($event->getSerialNumber());
 
-        if ($event->getAuthenticationToken() !== $passbook->getAuthToken()) {
+        // isAuthenticatedBy() uses hash_equals() internally: a timing-safe comparison.
+        // Never compare authentication tokens with === or !==.
+        if (!$event->isAuthenticatedBy($passbook->getAuthToken())) {
             $event->notAuthorized();
 
             return;
@@ -244,7 +250,7 @@ final class ApplePassbookSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($entity->getAuthToken() !== $event->getAuthenticationToken()) {
+        if (!$event->isAuthenticatedBy($entity->getAuthToken())) {
             $event->notAuthorized();
 
             return;
@@ -266,7 +272,7 @@ final class ApplePassbookSubscriber implements EventSubscriberInterface
     {
         $passbook = $this->passbookRepository->getBySerial($event->getSerialNumber());
 
-        if ($event->getAuthenticationToken() !== $passbook->getAuthToken()) {
+        if (!$event->isAuthenticatedBy($passbook->getAuthToken())) {
             $event->notAuthorized();
 
             return;

@@ -1,6 +1,6 @@
 {
     "name": "laulamanapps/apple-passbook-bundle",
-    "description": "Generate Apple Passbooks from your Symfony application",
+    "description": "Generate Apple Wallet passes (PassKit) from your Symfony application",
     "keywords": [
         "apple",
         "passbook",
@@ -22,6 +22,15 @@
             "email": "laurens.laman@llaman.nl"
         }
     ],
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../apple-passbook",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "autoload": {
         "psr-4": {
             "LauLamanApps\\ApplePassbookBundle\\": ["src/"]
@@ -34,7 +43,7 @@
     },
     "require": {
         "php": "^8.1",
-        "laulamanapps/apple-passbook": "2.0.x-dev",
+        "laulamanapps/apple-passbook": "2.0.x-dev || ^2.0",
         "ext-openssl": "*",
         "symfony/http-foundation": "^6.4|^7.0|^8.0",
         "symfony/routing": "^6.4|^7.0|^8.0",

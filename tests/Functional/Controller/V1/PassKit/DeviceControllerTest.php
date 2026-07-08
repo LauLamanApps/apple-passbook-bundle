@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace LauLamanApps\ApplePassbookBundle\Tests\Functional\Controller\V1\PassKit;
 
+use LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceRegisteredEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceRequestUpdatedPassesEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent;
 use LauLamanApps\ApplePassbookBundle\Tests\Functional\TestKernel;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController
- */
+#[CoversClass(DeviceController::class)]
 class DeviceControllerTest extends TestCase
 {
     private TestKernel $kernel;
@@ -33,11 +34,7 @@ class DeviceControllerTest extends TestCase
         restore_exception_handler();
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
-     * @dataProvider unAllowedMethodsForDeviceEndPoint
-     */
+    #[DataProvider('unAllowedMethodsForDeviceEndPoint')]
     public function testDeviceEndpointCalledWithWrongMethodReturns405(string $method): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>/<serialNumber>';
@@ -47,9 +44,6 @@ class DeviceControllerTest extends TestCase
         $this->assertSame(405, $this->client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::register
-     */
     public function testRegisterDispatchesEvent(): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>/<serialNumber>';
@@ -72,9 +66,6 @@ class DeviceControllerTest extends TestCase
         $this->assertSame(201, $this->client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::unregister
-     */
     public function testUnRegisterDispatchesEvent(): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>/<serialNumber>';
@@ -96,10 +87,7 @@ class DeviceControllerTest extends TestCase
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::getSerialNumbers
-     * @dataProvider unAllowedMethodsForDevicesEndPoint
-     */
+    #[DataProvider('unAllowedMethodsForDevicesEndPoint')]
     public function testDevicesEndpointCalledWithWrongMethodReturns405(string $method): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>';
@@ -109,9 +97,6 @@ class DeviceControllerTest extends TestCase
         $this->assertSame(405, $this->client->getResponse()->getStatusCode());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Controller\V1\PassKit\DeviceController::getSerialNumbers
-     */
     public function testGetSerialNumbersDispatchesEvent(): void
     {
         $uri = '/v1/devices/<deviceLibraryIdentifier>/registrations/<passTypeIdentifier>';

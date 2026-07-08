@@ -6,16 +6,12 @@ namespace LauLamanApps\ApplePassbookBundle\Tests\Unit;
 
 use LauLamanApps\ApplePassbookBundle\ApplePassbookBundle;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle
- */
+#[CoversClass(ApplePassbookBundle::class)]
 class ApplePassbookBundleTest extends TestCase
 {
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle::getContainerExtension
-     */
     public function testGetContainerExtension(): void
     {
         $bundle = new ApplePassbookBundle();
@@ -25,9 +21,6 @@ class ApplePassbookBundleTest extends TestCase
         $this->assertInstanceOf(ApplePassbookExtension::class, $extension);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\ApplePassbookBundle::getContainerExtension
-     */
     public function testGetContainerExtensionTwiceReturnsSameExtension(): void
     {
         $bundle = new ApplePassbookBundle();

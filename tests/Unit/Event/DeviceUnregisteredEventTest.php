@@ -7,21 +7,12 @@ namespace LauLamanApps\ApplePassbookBundle\Tests\Unit\Event;
 use LauLamanApps\ApplePassbookBundle\Event\AbstractEvent;
 use LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent;
 use LauLamanApps\ApplePassbookBundle\Event\Status;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent
- */
+#[CoversClass(DeviceUnregisteredEvent::class)]
 class DeviceUnregisteredEventTest extends TestCase
 {
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent::__construct
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent::getDeviceLibraryIdentifier
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent::getPassTypeIdentifier
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent::getSerialNumber
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent::getAuthenticationToken
-     * @covers \LauLamanApps\ApplePassbookBundle\Event\DeviceUnregisteredEvent::deviceUnregistered
-     */
     public function testConstructor(): void
     {
         $deviceLibraryIdentifier = '<deviceLibraryIdentifier>';

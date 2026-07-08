@@ -36,6 +36,14 @@ final class DeviceRegisteredEvent extends AbstractEvent
         return $this->authenticationToken;
     }
 
+    /**
+     * Timing-safe comparison of the request's authentication token against the expected token.
+     */
+    public function isAuthenticatedBy(#[\SensitiveParameter] string $expectedToken): bool
+    {
+        return $expectedToken !== '' && hash_equals($expectedToken, $this->authenticationToken);
+    }
+
     public function getPushToken(): string
     {
         return $this->pushToken;

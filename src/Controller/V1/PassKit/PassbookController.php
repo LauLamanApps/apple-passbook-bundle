@@ -29,6 +29,7 @@ class PassbookController
             $passTypeIdentifier,
             $serialNumber,
             $this->getAuthenticationToken($request),
+            $this->parseIfModifiedSince($request),
         );
         $this->eventDispatcher->dispatch($event);
 
@@ -38,6 +39,10 @@ class PassbookController
 
         if ($event->getStatus() === Status::NotAuthorized) {
             return new JsonResponse([], Response::HTTP_UNAUTHORIZED);
+        }
+
+        if ($event->getStatus() === Status::NotFound) {
+            return new JsonResponse([], Response::HTTP_NOT_FOUND);
         }
 
         if ($event->getStatus() === Status::NotModified) {
@@ -59,5 +64,20 @@ class PassbookController
         }
 
         throw new LogicException('RetrieveUpdatedPassbookEvent was not handled correctly. Unexpected status was set.');
+    }
+
+    private function parseIfModifiedSince(Request $request): ?\DateTimeImmutable
+    {
+        $ifModifiedSince = $request->headers->get('If-Modified-Since');
+
+        if ($ifModifiedSince === null || $ifModifiedSince === '') {
+            return null;
+        }
+
+        try {
+            return new \DateTimeImmutable($ifModifiedSince);
+        } catch (\Exception) {
+            return null;
+        }
     }
 }

@@ -71,6 +71,37 @@ if ($status === Status::Successful) { ... }
 
 The setter methods on events (`notAuthorized()`, `notFound()`, `notModified()`, `alreadyRegistered()`, and the type-specific methods like `deviceRegistered()`) remain unchanged.
 
+## Authentication token comparison
+
+The token-carrying events now expose `isAuthenticatedBy(string $expectedToken): bool`, which
+compares tokens with `hash_equals()`. Replace any `!==`/`===` token comparison in your listeners:
+
+```php
+// Before (timing-unsafe)
+if ($event->getAuthenticationToken() !== $passbook->getAuthToken()) {
+    $event->notAuthorized();
+    return;
+}
+
+// After
+if (!$event->isAuthenticatedBy($passbook->getAuthToken())) {
+    $event->notAuthorized();
+    return;
+}
+```
+
+## Web service behavior
+
+- The registration endpoint returns `400 Bad Request` for malformed JSON bodies before your
+  listener runs.
+- The `/v1/log` endpoint validates and caps the payload, and passes it to the logger as
+  `['logs' => [...]]` context.
+- `DeviceRequestUpdatedPassesEvent::getPassesUpdatedSince()` is populated from the
+  `passesUpdatedSince` query parameter — use it to return only serial numbers updated since that
+  time.
+- `RetrieveUpdatedPassbookEvent::getUpdatedSince()` is populated from the `If-Modified-Since`
+  header; setting `notFound()` on that event returns `404 Not Found`.
+
 ## Route configuration
 
 If you were importing the bundle's routes in your application, update the import path:

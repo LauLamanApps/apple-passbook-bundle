@@ -12,15 +12,14 @@ use LauLamanApps\ApplePassbook\Build\Notifier;
 use LauLamanApps\ApplePassbook\Build\Signer;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension;
 use LauLamanApps\ApplePassbookBundle\DependencyInjection\Configuration;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Reference;
 use ZipArchive;
 
-/**
- * @coversDefaultClass \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension
- */
+#[CoversClass(ApplePassbookExtension::class)]
 class ApplePassbookExtensionTest extends TestCase
 {
     private ContainerBuilder $container;
@@ -41,9 +40,6 @@ class ApplePassbookExtensionTest extends TestCase
         $extension->load([$config], $this->container);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::getAlias()
-     */
     public function testGetAlias(): void
     {
         $extension = new ApplePassbookExtension();
@@ -51,9 +47,6 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertSame(Configuration::ROOT, $extension->getAlias());
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testCompilerIsConfigured(): void
     {
         $expectedArguments = [
@@ -68,17 +61,11 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertAlias(Compiler::class, 'laulamanapps_apple_passbook.build.compiler');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testManifestGeneratorIsConfigured(): void
     {
         $this->assertDefinition(ManifestGenerator::class, 'laulamanapps_apple_passbook.build.manifestgenerator');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testSignerIsConfigured(): void
     {
         $expectedArguments = [
@@ -89,26 +76,17 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertDefinition(Signer::class, 'laulamanapps_apple_passbook.build.signer', $expectedArguments);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testZipArchiveIsConfigured(): void
     {
         $this->assertDefinition(ZipArchive::class, 'laulamanapps_apple_passbook.php.zip_archive');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testCompressorIsConfigured(): void
     {
         $expectedArguments = ['laulamanapps_apple_passbook.php.zip_archive'];
         $this->assertDefinition(Compressor::class, 'laulamanapps_apple_passbook.build.compressor', $expectedArguments);
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testNotifierIsConfigured(): void
     {
         $definition = $this->container->getDefinition('laulamanapps_apple_passbook.build.notifier');
@@ -121,9 +99,6 @@ class ApplePassbookExtensionTest extends TestCase
         $this->assertAlias(Notifier::class, 'laulamanapps_apple_passbook.build.notifier');
     }
 
-    /**
-     * @covers \LauLamanApps\ApplePassbookBundle\DependencyInjection\ApplePassbookExtension::load()
-     */
     public function testNotifierSandboxEnvironmentIsConfigured(): void
     {
         $container = new ContainerBuilder();
