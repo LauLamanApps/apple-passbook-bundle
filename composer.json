@@ -22,28 +22,23 @@
             "email": "laurens.laman@llaman.nl"
         }
     ],
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../apple-passbook",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "autoload": {
         "psr-4": {
-            "LauLamanApps\\ApplePassbookBundle\\": ["src/"]
+            "LauLamanApps\\ApplePassbookBundle\\": [
+                "src/"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LauLamanApps\\ApplePassbookBundle\\Tests\\": ["tests/"]
+            "LauLamanApps\\ApplePassbookBundle\\Tests\\": [
+                "tests/"
+            ]
         }
     },
     "require": {
         "php": "^8.1",
-        "laulamanapps/apple-passbook": "2.0.x-dev || ^2.0",
+        "laulamanapps/apple-passbook": "^2.0",
         "ext-openssl": "*",
         "symfony/http-foundation": "^6.4|^7.0|^8.0",
         "symfony/routing": "^6.4|^7.0|^8.0",
